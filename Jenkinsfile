@@ -51,11 +51,11 @@ pipeline {
         script {
           // kubernetesDeploy(configs: "deployment.yaml", "service.yaml")
            // Replace the Docker image tag in the Kubernetes YAML file
-                    bat '"
+                    bat '''
                         sed -i 's|image: .*$|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|' deployment.yaml
                         kubectl apply -f deployment.yaml
                         kubectl apply -f service.yaml
-                    "'
+                    '''
         }
       }
     }
