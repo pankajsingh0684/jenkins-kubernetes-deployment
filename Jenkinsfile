@@ -54,8 +54,7 @@ pipeline {
               def yamlFilePath = 'deployment.yaml'
                     bat '''
                         powershell -NoProfile -ExecutionPolicy Bypass -Command "& {
-                            (Get-Content '${yamlFilePath}') -replace 'image: .*', 'image: ${DOCKER_IMAGE}:${IMAGE_TAG}' | Set-Content '${yamlFilePath}'
-                        }"
+                            (Get-Content '${yamlFilePath}') -replace 'image: .*', 'image: ${DOCKER_IMAGE}:${IMAGE_TAG}' | Set-Content '${yamlFilePath}'}"
                         kubectl apply -f deployment.yaml
                         kubectl apply -f service.yaml
                     '''
