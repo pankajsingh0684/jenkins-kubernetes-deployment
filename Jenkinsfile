@@ -51,10 +51,14 @@ pipeline {
         script {
           // kubernetesDeploy(configs: "deployment.yaml", "service.yaml")
            // Replace the Docker image tag in the Kubernetes YAML file
-              def yamlFilePath = 'deployment.yaml'
-              def file = new File(yamlFilePath)
-              def updatedContent = file.text.replaceAll(/image: .*/, "image: ${DOCKER_IMAGE}:${IMAGE_TAG}")
-              file.text = updatedContent
+              // Read the YAML file
+                    def yamlContent = readFile('deployment.yaml')
+
+                    // Replace the image tag
+                    def updatedYamlContent = yamlContent.replaceAll(/image: .*/, "image: ${DOCKER_IMAGE}:${IMAGE_TAG}")
+
+                    // Write the updated content back to the file
+                    writeFile(file: 'deployment.yaml', text: updatedYamlContent)
                     bat '''
                         kubectl apply -f deployment.yaml
                         kubectl apply -f service.yaml
