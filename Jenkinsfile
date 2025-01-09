@@ -38,10 +38,9 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'docker_hub', 
                                                       usernameVariable: 'DOCKER_USER', 
                                                       passwordVariable: 'DOCKER_PASS')]) {
-                        bat "
-                            echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
+                      bat '" echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
                             docker push ${DOCKER_IMAGE}:${IMAGE_TAG}
-                        "
+                        '"
           }
         }
       }
@@ -52,11 +51,11 @@ pipeline {
         script {
           // kubernetesDeploy(configs: "deployment.yaml", "service.yaml")
            // Replace the Docker image tag in the Kubernetes YAML file
-                    bat "
+                    bat '"
                         sed -i 's|image: .*$|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|' deployment.yaml
                         kubectl apply -f deployment.yaml
                         kubectl apply -f service.yaml
-                    "
+                    "'
         }
       }
     }
