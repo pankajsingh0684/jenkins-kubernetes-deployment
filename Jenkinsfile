@@ -52,9 +52,10 @@ pipeline {
           // kubernetesDeploy(configs: "deployment.yaml", "service.yaml")
            // Replace the Docker image tag in the Kubernetes YAML file
               def yamlFilePath = 'deployment.yaml'
+              def file = new File(yamlFilePath)
+              def updatedContent = file.text.replaceAll(/image: .*/, "image: ${DOCKER_IMAGE}:${IMAGE_TAG}")
+              file.text = updatedContent
                     bat '''
-                        powershell -NoProfile -ExecutionPolicy Bypass -Command "& {
-                            (Get-Content '${yamlFilePath}') -replace 'image: .*', 'image: ${DOCKER_IMAGE}:${IMAGE_TAG}' | Set-Content '${yamlFilePath}'}"
                         kubectl apply -f deployment.yaml
                         kubectl apply -f service.yaml
                     '''
