@@ -2,7 +2,8 @@ pipeline {
 
   environment {
     DOCKER_IMAGE  = "pankajs2284/react-app"
-    IMAGE_TAG = "${env.BUILD_ID}"
+    IMAGE_TAG = "${env.BUILD_ID}".replaceAll('[^a-zA-Z0-9._-]', '-') // Replace invalid characters
+    //IMAGE_TAG = "${env.BUILD_ID}"
   }
 
   agent any
@@ -19,7 +20,8 @@ pipeline {
       steps{
         script {
          // dockerImage = docker.build dockerimagename
-          bat 'docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} .'
+          echo "Building Docker image: ${DOCKER_IMAGE}:${IMAGE_TAG}"
+          bat "docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} ."
         }
       }
     }
