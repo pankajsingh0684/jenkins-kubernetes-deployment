@@ -2,8 +2,8 @@ pipeline {
 
   environment {
     DOCKER_IMAGE  = "pankajs2284/reactapp"
-    //IMAGE_TAG = "${env.BUILD_ID}".replaceAll('[^a-zA-Z0-9._-]', '-') // Replace invalid characters
-    IMAGE_TAG = "${env.BUILD_ID}"
+    IMAGE_TAG = "${env.BUILD_ID}".replaceAll('[^a-zA-Z0-9._-]', '-') // Replace invalid characters
+    //IMAGE_TAG = "${env.BUILD_ID}"
   }
 
   agent any
@@ -51,8 +51,9 @@ pipeline {
         script {
           // kubernetesDeploy(configs: "deployment.yaml", "service.yaml")
            // Replace the Docker image tag in the Kubernetes YAML file
+          
                     bat '''
-                        sed -i 's|image: .*$|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|' deployment.yaml
+                        powershell -Command "(Get-Content deployment.yaml) -replace 'image: .*', 'image: ${DOCKER_IMAGE}:${IMAGE_TAG}' | Set-Content deployment.yaml"
                         kubectl apply -f deployment.yaml
                         kubectl apply -f service.yaml
                     '''
