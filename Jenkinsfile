@@ -56,7 +56,7 @@ pipeline {
 
                     // Replace the image tag
                     def updatedYamlContent = yamlContent.replaceAll(/image: .*/, "image: ${DOCKER_IMAGE}:${IMAGE_TAG}")
-
+                     echo "updatedYamlContent: ${updatedYamlContent}"
                     // Write the updated content back to the file
                     writeFile(file: 'deployment.yaml', text: updatedYamlContent)
                     bat '''
