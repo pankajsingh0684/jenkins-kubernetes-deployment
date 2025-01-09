@@ -53,7 +53,7 @@ pipeline {
            // Replace the Docker image tag in the Kubernetes YAML file
               def yamlFilePath = 'deployment.yaml'
                     bat '''
-                        powershell -Command "(Get-Content ${yamlFilePath}) -replace 'image: .*', 'image: ${DOCKER_IMAGE}:${IMAGE_TAG}' | Set-Content ${yamlFilePath}"
+                        powershell -Command (Get-Content ${yamlFilePath}) -replace 'image: .*', 'image: ${DOCKER_IMAGE}:${IMAGE_TAG}' | Set-Content ${yamlFilePath}
                         kubectl apply -f deployment.yaml
                         kubectl apply -f service.yaml
                     '''
